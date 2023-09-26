@@ -1,14 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import userData from "../../Data/mockData";
 import "./style.css";
+import Alert from "../../components/AlertaCustom/AlertaCustom";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [ocupacao, setOcupacao] = useState("Candidato");
+  const [showAlert, setShowAlert] = useState(false); // State to control alert visibility
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleLogin = () => {
+    const user = userData.find(
+      (user) => user.email === email && user.password === password
+    );
+
+    if (user) {
+      window.location.href = ocupacao === "Candidato" ? "/Candidato" : "/Empresa";
+    } else {
+      setShowAlert(true);
+    }
+  };
+
+  const handleAlertClose = () => {
+    setShowAlert(false);
+  };
 
   return (
     <>
-    
       <div
         style={{
           position: "fixed",
@@ -46,6 +73,8 @@ const Login = () => {
           <input
             type="text"
             placeholder="Digite seu email"
+            value={email}
+            onChange={handleEmailChange}
             style={{
               width: "80%",
               marginBottom: "10px",
@@ -62,6 +91,7 @@ const Login = () => {
               outline: "none",
             }}
           />
+
           <div className="inputSelect">
             <label>Selecione sua ocupação</label>
             <select
@@ -86,9 +116,12 @@ const Login = () => {
               <option value="Empresa">Empresa</option>
             </select>
           </div>
+
           <input
-            type="Senha"
+            type="password"
             placeholder="Digite sua senha"
+            value={password}
+            onChange={handlePasswordChange}
             style={{
               width: "80%",
               marginBottom: "10px",
@@ -129,6 +162,7 @@ const Login = () => {
           </button>
 
           <button
+            onClick={handleLogin}
             style={{
               flex: 1,
               marginRight: "5px",
@@ -142,14 +176,7 @@ const Login = () => {
               outline: "none",
             }}
           >
-            <NavLink
-              to={ocupacao === "Candidato" ? "/Candidato" : "/Empresa"}
-              style={{
-                color: "#000000",
-              }}
-            >
-              Login
-            </NavLink>
+            <span>Login</span>
           </button>
 
           <button
@@ -176,6 +203,14 @@ const Login = () => {
           </button>
         </div>
       </div>
+
+     
+      {showAlert && (
+        <Alert
+          message="Credenciais Inválidas"
+          onClose={handleAlertClose}
+        />
+      )}
     </>
   );
 };

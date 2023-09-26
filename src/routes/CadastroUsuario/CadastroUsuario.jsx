@@ -1,7 +1,30 @@
 import React from "react";
 import "./style.css";
+import userData from '../../Data/mockData';
+import { useState } from "react";
+
 
 const CadastroUsuario = () => {
+
+  const [nome, setNome] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [email, setEmail] = useState("");
+  const [ocupacao, setOcupacao] = useState("");
+  const [senha, setSenha] = useState("");
+
+  const handleCadastro = () => {
+    const newUser = {
+      email,
+      password: senha,
+      role: ocupacao,
+    };
+    const existingData = JSON.parse(localStorage.getItem("userData")) || [];
+    const updatedData = [...existingData, newUser];
+    localStorage.setItem("userData", JSON.stringify(updatedData));
+    alert("Usuário Adicionado ! ", newUser);
+  };
+
   const containerStyle = {
     position: "fixed",
     left: 0,
@@ -178,6 +201,7 @@ const CadastroUsuario = () => {
           }}
         />
         <button
+        onClick={handleCadastro}
           style={{
             flex: 1,
             marginRight: "5px",
